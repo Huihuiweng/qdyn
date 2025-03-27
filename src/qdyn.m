@@ -288,6 +288,7 @@ V_0=V_SS ;
 TH_0=DC/V_SS;
 V1=0.01;
 V2=1e-7;
+SWMU=0.0;
 %-- branching fault
 %JPA This is an undocumented feature implemented by Percy
 BRANCH='.false.';

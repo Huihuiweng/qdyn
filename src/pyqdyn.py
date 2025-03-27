@@ -106,6 +106,7 @@ class qdyn:
             "DC": 1e-5,							# Characteristic slip distance
             "V1": 0.01,							# Cut-off velocity of direct effect (when RNS_LAW = 1) [m/s]
             "V2": 1e-7,							# Cut-off velocity of evolution effect (when RNS_LAW = 1) [m/s], Controls transition from weakening to strengthening. V2 should be <= V1
+            "SWMU": 0.0,						# Slip-weakening term
             "MU_SS": 0.6,						# Reference steady-state friction
             "V_SS": 1e-6,						# Reference steady-state slip velocity [m/s]
             "CO": 0,							# Cohesion [Pa]
