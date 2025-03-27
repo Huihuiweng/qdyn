@@ -28,6 +28,7 @@ subroutine initiate_RSF(pb)
   pb%mu_star = 0.6
   pb%v1 = 1e-3
   pb%v2 = 1e-1
+  pb%swmu = 0.d0
 
   pb%i_rns_law = 0
   pb%itheta_law = 1

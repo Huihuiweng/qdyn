@@ -148,8 +148,13 @@ subroutine derivs(time,yt,dydt,pb)
     ! Rearranged in the following form:
     !  dv/dt = ( dtau_load/dt + dtau_elastostatic/dt - sigma*dmu/dtheta*dtheta/dt )/( sigma*dmu/dv + impedance )
 
+    if(pb%i_rns_law == 4) then
+    dmain_var = ( dtau_per + dtau_dt - sigma*dmu_dtheta*dth_dt - dtau_dP*dP_dt - pb%swmu*v ) &
+                     / ( sigma*dmu_dv + pb%zimpedance )
+    else
     dmain_var = ( dtau_per + dtau_dt - sigma*dmu_dtheta*dth_dt - dtau_dP*dP_dt ) &
                      / ( sigma*dmu_dv + pb%zimpedance )
+    endif
    endif
 
    call pack(dydt, dth_dt, dmain_var, dsigma_dt, dth2_dt, dslip, pb)

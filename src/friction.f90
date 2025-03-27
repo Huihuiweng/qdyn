@@ -39,9 +39,8 @@ subroutine set_theta_star(pb)
     pb%theta_star = 1
 
 ! new friction law:
-!  case(xxx)
-!    implement here your definition of theta_star (could be none)
-!    pb%theta_star = ...
+  case(4)
+    pb%theta_star = pb%dc/pb%v_star
 
   case default
     stop 'set_theta_star: unknown friction law type'
@@ -72,9 +71,8 @@ function friction_mu(v,theta,pb) result(mu)
     stop
 
 ! new friction law:
-!  case(xxx)
-!    implement here your friction coefficient: mu = f(v,theta)
-!    mu = ...
+  case(4)
+    mu = pb%mu_star - pb%a*log(pb%v_star/v) + pb%b*log(theta/pb%theta_star) + pb%swmu * pb%slip
 
   case default
     stop 'friction_mu: unknown friction law type'
@@ -111,9 +109,8 @@ subroutine dtheta_dt(v,tau,sigma,theta,theta2,dth_dt,dth2_dt,pb)
       dth_dt = -omega*log(omega)
 
   ! new friction law:
-  !  case(xxx)
-  !    implement here your state evolution law: dtheta/dt = g(v,theta)
-  !    dth_dt = ...
+    case(4)
+      dth_dt = -omega
 
     case default
       stop 'dtheta_dt: unknown state evolution law type'
@@ -149,6 +146,11 @@ subroutine dmu_dv_dtheta(dmu_dv,dmu_dtheta,v,theta,pb)
   case(3) ! SEISMIC: CNS model
     write (6,*) "friction.f90::dmu_dv_dtheta is deprecated for the CNS model"
     stop
+
+  ! new friction law:
+  case(4)
+    dmu_dtheta = pb%b / theta
+    dmu_dv = pb%a / v
 
   case default
     write (6,*) "dmu_dv_dtheta: unkown friction law type"
