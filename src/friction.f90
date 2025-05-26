@@ -42,6 +42,9 @@ subroutine set_theta_star(pb)
   case(4)
     pb%theta_star = pb%dc/pb%v_star
 
+  case(5)
+    pb%theta_star = pb%dc/pb%v_star
+
   case default
     stop 'set_theta_star: unknown friction law type'
   end select
@@ -73,6 +76,8 @@ function friction_mu(v,theta,pb) result(mu)
 ! new friction law:
   case(4)
     mu = pb%mu_star - pb%a*log(pb%v_star/v) + pb%b*log(theta/pb%theta_star) + pb%swmu * pb%slip
+  case(5)
+    mu = pb%mu_star - pb%a*log(pb%v1/v+1d0) + pb%b*log(theta/pb%theta_star+1d0) + pb%swmu * pb%slip
 
   case default
     stop 'friction_mu: unknown friction law type'
@@ -111,6 +116,8 @@ subroutine dtheta_dt(v,tau,sigma,theta,theta2,dth_dt,dth2_dt,pb)
   ! new friction law:
     case(4)
       dth_dt = -omega
+    case(5) ! "aging" law
+      dth_dt = 1.d0-omega
 
     case default
       stop 'dtheta_dt: unknown state evolution law type'
@@ -151,6 +158,9 @@ subroutine dmu_dv_dtheta(dmu_dv,dmu_dtheta,v,theta,pb)
   case(4)
     dmu_dtheta = pb%b / theta
     dmu_dv = pb%a / v
+  case(5)
+    dmu_dtheta = pb%b * pb%v2 / ( pb%v2*theta + pb%dc )
+    dmu_dv = pb%a * pb%v1 / v / ( pb%v1 + v )
 
   case default
     write (6,*) "dmu_dv_dtheta: unkown friction law type"
